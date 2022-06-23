@@ -4,25 +4,9 @@ import PostItem from "./PostItem";
 
 const PostList=(props)=>{
     
-  const {posts, deletePost}=props
-  const [toggle,setToggle]=useState(false)
+  const {posts, deletePost, editPost}=props
   
   
-   const handleDelete=(id)=>{
-        deletePost(id)
-   }
-   const handleEdit=()=>{
-        setToggle(!toggle)
-   }
-   const handleEditChange=(e,id)=>{
-        //console.log(e.target.value)
-        //console.log(id)
-        posts.map((post)=>{
-            if(post.id==id){
-              return  post.title=e.target.value
-            }
-        })
-   }
    
     return (
         <div>
@@ -39,16 +23,7 @@ const PostList=(props)=>{
                     {posts.map((post)=>{
                         //console.log(post,post.id)
                         return (
-                            <tr key={post.id}>
-                                <td>{post.id}</td>
-                                <td>{post.title}</td>
-                                <td><button onClick={()=>{handleEdit()}}>
-                                {
-                                    toggle ? (<input type='text' value={post.title} onChange={()=>{handleEditChange(post.id)}}/>):"Edit"
-                                }
-                                </button></td>
-                                <td><button onClick={()=>{handleDelete(post.id)}}>Delete</button></td>
-                            </tr>
+                            <PostItem key={post.id} {...post} deletePost={deletePost} editPost={editPost}/>
                         )
                     })
 

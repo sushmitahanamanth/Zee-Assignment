@@ -2,6 +2,7 @@ import React,{useState,useEffect} from "react";
 import PostList from "./PostList";
 import ReactPaginate from 'react-paginate'
 import axios from 'axios'
+import EditPost from "./EditPost";
 
 const PostContainer=()=>{
     const [posts,setPosts]=useState([])
@@ -37,6 +38,19 @@ const PostContainer=()=>{
             })
             setPosts(result)
     }
+
+    const updatePost=(formdata)=>{
+  
+            const result=posts.map((post)=>{
+                if(post.id===formdata.id){
+                    return {...post,...formdata}
+                }else{
+                    return {...post}
+                }
+            })
+            setPosts(result)
+        
+    }
     useEffect(()=>{
         axios.get('https://jsonplaceholder.typicode.com/posts')
             .then((response)=>{
@@ -54,25 +68,19 @@ const PostContainer=()=>{
         <div>
             <h1>Post List</h1>
             <input type='text' value={search} onChange={searchHandle}/>
-            {/* {
-                filteredPost().length ?
-                (<PostList posts={filteredPost()} deletePost={deletePost}/>):
-                (<PostList posts={posts} deletePost={deletePost}/>)
-                
-            } */}
             {
                 search ?
                 <div>
                     {
                         filteredPost().length>0 ?filteredPost().slice(pageVisited,pageVisited+postsPerPage).map(post=>{
-                            return <PostList key={post.id} posts={filteredPost()} deletePost={deletePost}/>
+                            return <PostList key={post.id} posts={filteredPost()} deletePost={deletePost} updatePost={updatePost}/>
                         }):<h3>No posts</h3>
                     }
                 </div>:
                 <div>
                     {
                         posts.slice(pageVisited,pageVisited+postsPerPage).map(post=>{
-                            return <PostList key={post.id} posts={posts}deletePost={deletePost}/>
+                            return <PostList key={post.id} posts={posts}deletePost={deletePost} updatePost={updatePost}/>
                         })
                     }
                 </div>
